@@ -2467,14 +2467,14 @@ impl<'de> Visitor<'de> for CountryCodeVisitor {
     type Value = CountryCode;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(formatter, "an ISO 3166-1 compliant alpha-2 country code")
+        write!(formatter, "an ISO 3166-1 compliant alpha-3 country code")
     }
 
     fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
     where
         E: de::Error,
     {
-        match CountryCode::for_alpha2_caseless(v) {
+        match CountryCode::for_alpha3_caseless(v) {
             Ok(x) => Ok(x),
             Err(_) => Err(de::Error::invalid_value(de::Unexpected::Str(v), &self)),
         }
@@ -2484,7 +2484,7 @@ impl<'de> Visitor<'de> for CountryCodeVisitor {
     where
         E: de::Error,
     {
-        match CountryCode::for_alpha2_caseless(v) {
+        match CountryCode::for_alpha3_caseless(v) {
             Ok(x) => Ok(x),
             Err(_) => Err(de::Error::invalid_value(de::Unexpected::Str(v), &self)),
         }
