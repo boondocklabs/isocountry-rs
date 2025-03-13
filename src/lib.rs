@@ -24,6 +24,7 @@ use schemars::JsonSchema;
 use serde::de::{self, Visitor};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::fmt::{self, Display};
+use strum::{EnumDiscriminants, EnumIter, IntoStaticStr};
 use thiserror::Error;
 
 /// Two-character uppercase ISO 3166-1 strings for each country
@@ -37,7 +38,11 @@ pub mod numeric;
 
 mod sorted_arrays;
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, JsonSchema)]
+#[derive(
+    Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, JsonSchema, EnumDiscriminants,
+)]
+#[strum_discriminants(derive(EnumIter, IntoStaticStr, Hash))]
+
 /// An enumeration of all ISO-3166-1 country codes
 pub enum CountryCode {
     /// Afghanistan
@@ -2450,7 +2455,7 @@ impl Serialize for CountryCode {
     where
         S: Serializer,
     {
-        serializer.collect_str(self.alpha2())
+        serializer.collect_str(self.alpha3())
     }
 }
 
